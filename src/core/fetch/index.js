@@ -3,6 +3,7 @@ import { callHook } from '../init/lifecycle';
 import { getParentPath, stringifyQuery } from '../router/util';
 import { noop } from '../util/core';
 import { getAndActive } from '../event/sidebar';
+import { isExternal } from '../../../packages/docsify-server-renderer/src/utils';
 import { get } from './ajax';
 
 function loadNested(path, qs, file, next, vm, first) {
@@ -20,20 +21,20 @@ function loadNested(path, qs, file, next, vm, first) {
   ).then(next, _ => loadNested(path, qs, file, next, vm));
 }
 
-// Borrowed from https://j11y.io/snippets/getting-a-fully-qualified-url.
-function qualifyURL(url) {
-  const img = document.createElement('img');
-  img.src = url; // set string url
-  url = img.src; // get qualified url
-  img.src = ''; // prevent the server request
-  return url;
-}
+// // Borrowed from https://j11y.io/snippets/getting-a-fully-qualified-url.
+// function qualifyURL(url) {
+//   const img = document.createElement('img');
+//   img.src = url; // set string url
+//   url = img.src; // get qualified url
+//   img.src = ''; // prevent the server request
+//   return url;
+// }
 
-export function isExternal(url) {
-  url = qualifyURL(url);
-  url = new URL(url);
-  return url.origin !== location.origin;
-}
+// export function isExternal(url) {
+//   url = qualifyURL(url);
+//   url = new URL(url);
+//   return url.origin !== location.origin;
+// }
 
 export function fetchMixin(proto) {
   let last;
